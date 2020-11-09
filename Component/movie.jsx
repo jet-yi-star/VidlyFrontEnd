@@ -1,27 +1,29 @@
 import React, { Component } from "react";
 import { deleteMovie, getMovie, getMovies } from "../services/fakeMovieService";
 class Movie extends Component {
-  state = { movies: getMovies(), tags: ["tag1", "tag2", "tag3"] };
+  state = { movies: getMovies() };
 
   deleteMovieById = (id) => {
-    let movieInDb = deleteMovie(id);
+    const movies = this.state.movies.filter(m=>m._id !== id);
     // this.state.movies.splice(this.state.movies.indexOf(movieInDb), 1);
     // console.log(movieInDb);
-    this.setState({ movies: this.state.movies });
+    this.setState({ movies});
   };
   renderMessages() {
     if (this.state.movies.length === 0) return;
   }
   render() {
+       const {length: count} = this.state.movies;
     return (
       <React.Fragment>
-        {this.state.movies.length === 0 && (
+        
+        {count === 0 && (
           <span>There are no movies in the database</span>
         )}
-        {this.state.movies.length !== 0 && (
-          <span>{`Showing ${this.state.movies.length} movies in the database`}</span>
+        {count !== 0 && (
+          <span>{`Showing ${count} movies in the database`}</span>
         )}
-        {this.state.movies.length !== 0 && (
+        {count !== 0 && (
           <table className="table">
             <thead>
               <tr>
@@ -35,10 +37,10 @@ class Movie extends Component {
             <tbody>
               {this.state.movies.map((it) => (
                 <tr key={it._id}>
-                  <td key={it.title}>{it.title}</td>
-                  <td key={it.genre.name}>{it.genre.name}</td>
-                  <td key={it.numberInStock}>{it.numberInStock}</td>
-                  <td key={it.dailyRentalRate}>{it.dailyRentalRate}</td>
+                  <td>{it.title}</td>
+                  <td>{it.genre.name}</td>
+                  <td>{it.numberInStock}</td>
+                  <td>{it.dailyRentalRate}</td>
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => {
